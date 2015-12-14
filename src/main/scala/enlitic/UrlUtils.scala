@@ -7,11 +7,11 @@ object UrlUtils {
 
   def downloadAndCache(url: String, key: String, cache: Cache[String]): String = {
     cache.get(key) {
-      downloadUrl(url, 0)
+      downloadUrl(url)
     }
   }
 
-  private def downloadUrl(url: String, sleepMillis: Int): String = {
+  def downloadUrl(url: String, sleepMillis: Int = 0): String = {
     if (sleepMillis > MAX_SLEEP) throw new RuntimeException("Could not download url " + url)
     Thread.sleep(sleepMillis)
     val response = Http(url).option(HttpOptions.followRedirects(true)).asString

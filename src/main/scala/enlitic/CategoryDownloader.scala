@@ -38,8 +38,9 @@ case class CategoryDownloader(internalName: String, wikiName: String) {
   private def getPage(url: String): Page = {
     val name = WikiParser.pageName(url)
     val text = txtPageCache.get(name + ".txt") {
-      val body = UrlUtils.downloadAndCache(WikiParser.fullUrl(url), name + ".html", htmlPageCache)
-      WikiParser.getPageText(body)
+      htmlPageCache.get(name + ".html") {
+        CategoryDownloader.downloadPage(WikiParser.fullUrl(url))
+      }
     }
 
     Page(name, text)
@@ -68,7 +69,18 @@ object CategoryDownloader {
   }
 
   def main(args: Array[String]): Unit = {
-    val result = Future.sequence(categories.map(_.getPages))
-    Await.result(result, 10 minutes)
+    if (args.length > 1) {
+      print(downloadPage(args(1)))
+    } else {
+      println("DOWNLOADING CATEGORIES")
+      val result = Future.sequence(categories.map(_.getPages))
+      Await.result(result, 10 minutes)
+      println("DOWNLOAD COMPLETE")
+    }
+  }
+
+  def downloadPage(url: String): String = {
+    val body = UrlUtils.downloadUrl(url)
+    WikiParser.getPageText(body)
   }
 }
