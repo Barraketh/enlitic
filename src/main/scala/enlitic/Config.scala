@@ -5,4 +5,6 @@ package enlitic
   */
 object Config {
   val DATA_DIR = "data"
+  val DOWNLOAD_CACHE = DATA_DIR + "/downloads"
+  val TRAINING_DIR = DATA_DIR + "/txt"
 }

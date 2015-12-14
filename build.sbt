@@ -1,11 +1,18 @@
-name := "Enlitic Wiki Classifier"
+name := "wiki-scraper"
 
-scalaVersion := "2.10.6"
+version := "0.1"
+
+scalaVersion := "2.11.7"
 
 libraryDependencies ++=  Seq(
   "org.scalaj" %% "scalaj-http" % "2.2.0",
-  "org.jsoup" % "jsoup" % "1.8.3",
-  "org.apache.spark" % "spark-mllib_2.10" % "1.5.2"
-
-
+  "org.jsoup" % "jsoup" % "1.8.3"
 )
+
+import sbtassembly.AssemblyPlugin.defaultShellScript
+
+assemblyOption in assembly := (assemblyOption in assembly).value.copy(prependShellScript = Some(defaultShellScript))
+
+assemblyJarName in assembly := s"${name.value}-${version.value}"
+
+target in assembly := file("artifacts")

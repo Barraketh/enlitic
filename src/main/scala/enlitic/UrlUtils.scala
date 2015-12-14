@@ -5,7 +5,7 @@ import scalaj.http._
 object UrlUtils {
   val MAX_SLEEP = 60000
 
-  def download(url: String, key: String, cache: Cache[String]): String = {
+  def downloadAndCache(url: String, key: String, cache: Cache[String]): String = {
     cache.get(key) {
       downloadUrl(url, 0)
     }
